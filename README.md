@@ -15,10 +15,12 @@ IBM Cloud already has a Git repository for free in some data certers. But in my 
 * Draft [Deploy GitLab with IBM Cloud Block Storage](https://github.com/ebasso/ibm-cloud-deploy-gitlab/tree/master/doc/deploy-with-cloud-storage.md)
 
 
-# 1. Prerequisites
+# Deploying Gitlab
+
+## 1. Prerequisites
 
 
-## 1.1 Cloning Repository
+### 1.1 Cloning Repository
 
 Clone the repository
 
@@ -28,11 +30,11 @@ git clone https://github.com/ebasso/ibm-cloud-deploy-gitlab.git
 cd ibm-cloud-deploy-gitlab
 ```
 
-## 1.2 Install ibmcloud and kubectl
+### 1.2 Install ibmcloud and kubectl
 
 Have the IBM Cloud client (ibmcloud) and Kubernetes (kubectl) CLIs installed and working.
 
-## 1.3 Login to IBM Cloud and Configure environment
+### 1.3 Login to IBM Cloud and Configure environment
 
 Login to IBM Cloud
 
@@ -46,15 +48,15 @@ Target the right organization and space
 ibmcloud target --cf
 ```
 
-## 1.4 (Only first time) Install the IBM Cloud Container Service plug-in
+### 1.4 (Only first time) Install the IBM Cloud Container Service plug-in
 
 ```
 ibmcloud plugin install container-service
 ```
 
-# 2 Deploying
+## 2 Deploying
 
-## 2.1 Check for existing clusters or create one
+### 2.1 Check for existing clusters or create one
 
 Test if you have any clusters set-up already, or create a new cluster from the web-based UI, because of multiple options.
 
@@ -67,7 +69,7 @@ $ ibmcloud ks clusters
   eb-oc31-cluster bbbbbbbbbbbbbbbbbb02   normal   1 month ago   3         sao01        3.11.200_1548_openshift   rg-dev                classic
 ```
 
-## 2.2 Download and set the configuration for your cluster
+### 2.2 Download and set the configuration for your cluster
 
 ```
 ibmcloud ks cluster-config --cluster ek8s-cluster
@@ -79,7 +81,7 @@ you can confirm
 kubectl config current-context
 ```
 
-## 2.3 Run the scripts in the repo
+### 2.3 Run the scripts in the repo
 
  I suggest you to open Kubernetes console and follow when each component is ready!
 
