@@ -1,0 +1,9 @@
+.DS_Store
+instrucoes.txt
+kubernetes/*-backup.yaml
+kubernetes/*-prod.yaml
+kubernetes/postgres/*-backup.yaml
+kubernetes/redis/*-backup.yaml
+kubernetes/gitlab/*-backup.yaml
+kubernetes/ingress/*-backup.yaml
+
