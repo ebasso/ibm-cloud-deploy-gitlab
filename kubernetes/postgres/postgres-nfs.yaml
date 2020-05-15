@@ -1,0 +1,114 @@
+# 
+#
+#
+# PersistentVolume
+# PersistentVolumeClaim
+
+###########################
+# PersistentVolume
+###########################
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+ name: gitlab-postgres-pv
+ labels:
+  app: gitlab
+  tier: postgres
+spec:
+ capacity:
+   storage: "20Gi"
+ accessModes:
+   - ReadWriteMany
+nfs:
+   server: "fsf-<CHANGE_ME>-fz.service.softlayer.com"
+   path: "/<CHANGE_ME>/data01"
+
+
+###########################
+# PersistentVolumeClaim
+###########################
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitlab-data-claim
+  annotations:
+    volume.beta.kubernetes.io/storage-class: ""
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: "20Gi"
+  selector:
+    matchLabels:
+      app: gitlab
+      tier: postgres
+
+
+###########################
+# Service
+###########################
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql
+  labels:
+    app: gitlab
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: gitlab
+    tier: postgreSQL
+
+###########################
+# Deployment
+###########################
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql
+  labels:
+    app: gitlab
+spec:
+  selector:
+    matchLabels:
+      app: gitlab
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: gitlab
+        tier: postgreSQL
+    spec:
+      containers:
+        - image: postgres:10.1-alpine
+          name: postgresql
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/pgdata
+            - name: POSTGRES_USER
+              value: gitlab
+            - name: POSTGRES_DB
+              value: gitlabhq_production
+            - name: POSTGRES_PASSWORD
+              value: gitlab
+          ports:
+            - containerPort: 5432
+              name: postgresql
+          volumeMounts:
+            - name: postgresql
+              mountPath: /var/lib/postgresql:rw
+      volumes:
+        - name: postgresql
+          persistentVolumeClaim:
+            claimName: gitlab-postgres-claim
+

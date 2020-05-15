@@ -1,0 +1,42 @@
+
+###########################
+# PersistentVolume
+###########################
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+ name: gitlab-data-pv
+ labels:
+  app: gitlab
+  tier: data
+spec:
+ capacity:
+   storage: "20Gi"
+ accessModes:
+   - ReadWriteMany
+ nfs:
+   server: "fsf-<CHANGE_ME>-fz.service.softlayer.com"
+   path: "/<CHANGE_ME>/data01"
+
+
+###########################
+# PersistentVolumeClaim
+###########################
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitlab-data-claim
+  annotations:
+    volume.beta.kubernetes.io/storage-class: ""
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: "20Gi"
+  selector:
+    matchLabels:
+      app: gitlab
+      tier: data

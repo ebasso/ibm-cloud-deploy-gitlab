@@ -1,0 +1,22 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: gitlab
+  annotations:
+   ingress.bluemix.net/redirect-to-https: "True"
+   ingress.bluemix.net/client-max-body-size: "size=100m"
+spec:
+  tls:
+  - hosts:
+    - c3.ams03.containers.cloud.ibm.com
+    secretName: caixa-tem-gitlab-containers-dev
+  rules:
+  - host: c3.ams03.containers.cloud.ibm.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gitlab
+          servicePort: 80
+      
